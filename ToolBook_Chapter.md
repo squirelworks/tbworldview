@@ -43,6 +43,8 @@ A parallel effort unpacked every Optloader-wrapped NE image, imported them into 
 
 The book-open sequence itself has been sketched (Tbload → ZZZTBKBOOKLOC → JBO signature check → page allocation → CDBSENDCREATE / CDBNEWOBJECT → bounds written at object+0xF) but the exact instruction that reads a `14 00 00` record and fills the object has not been isolated under the debugger. That missing translation step is why most non-polygon widgets and most other books still render poorly.
 
+An early working note claimed that the on-disk property header `14 00 00 01` is rewritten in memory as `14 00 00 11`. That rewrite was not confirmed. Later live `80 65` objects used `14 00 00 02`. Do not treat `11` as the expanded form.
+
 ## 5. Graphics status
 
 - Embedded Windows BMPs have been carved from the course books (hundreds of unique pictures and icons).
@@ -61,7 +63,19 @@ Secondary gaps are:
 - Robust handling of system-book and cross-book jumps for every lesson, not just Logic Families.
 - A convenient way to log the fast open path (SoftICE `BPX \ldots DO` logging, a Watcom debugger session, or a thin logging proxy in the style of the existing TB80BMP proxy).
 
-## 7. What is in this repository
+## 7. Work recorded after the first binder
+
+### Module catalog
+
+Export names and version resources from the unpacked images are written up in `Modules/module_catalog.md`. The lesson path is `tbload` to `TB80RUN`, through the W32/W16 thunk, into `TB80RTM` and then `TB80BAS`. `CDBFILEOPEN` is ordinal 8. `COMPILEREXPANDTEXT` is ordinal 3. `TB80JPG` still carries the version-resource name `TB60JPG`. `TB80LNL` is the Lionel media engine. The `linkDLL` extensions are not loaded unless a handler asks for them.
+
+### A second way to read a book
+
+JohnDoe1, a former SumTotal ToolBook writer and support programmer, described a hidden ToolBook 11.5 command that saves a book as `.TBKX`. That file is a ZIP of the media plus an XML description of pages, objects, bounds, layers, and properties. It was introduced around 9.5. The constraints (32-bit 11.5, MSXML 4, the unresettable 30-day trial, and the permanent trial banner on any book the trial saves) are in `SME/README.md`.
+
+As of 2026-10-12 JohnDoe1 was testing the 8.1 to 11.5 to `.TBKX` steps and had not sent them. No NIDA lesson has been opened in 11.5. The personal name and the Knowledge Base address are not in this repository.
+
+## 8. What is in this repository
 
 This repository is the written record. It does not contain the binaries, the course books, or the reader source.
 
@@ -73,6 +87,8 @@ This repository is the written record. It does not contain the binaries, the cou
 | OpenScript decoder notes | `OpenScript/` |
 | SoftICE sessions | `SoftICE/` |
 | Clean-room reader status | `Runtimes/` |
+| Module roles and export ordinals | `Modules/module_catalog.md` |
+| ToolBook 11.5 and the `.TBKX` export | `SME/` |
 | Double-sided binder | `_production/TBWorldview_printable.pdf` |
 
 Code that used to be cited by local folder name lives in other repositories:

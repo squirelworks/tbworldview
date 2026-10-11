@@ -21,10 +21,12 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 ## Subdirectories
 
 - `Modules/tb80*_knownnames/` — confirmed renames and nameable lists, one directory per DLL
+- `Modules/module_catalog.md` — what each runtime module does, and the export ordinals that matter
 - `BookFormat/` — on-disk page and widget records
 - `OpenScript/` — bytecode decoder notes
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
+- `SME/` — the ToolBook 11.5 `.TBKX` export, from correspondence with JohnDoe1
 
 ## Related repositories
 
