@@ -14,7 +14,7 @@ Page objects are the only records that begin with the marker `80 65 00 05 00 02 
 
 Object-type names (Page, Button, Field, Picture, Polygon, Arc, Curve, Rectangle, etc.) live in a classification table inside `TB80UTL.DLL` and are also present as resources in the system `.sbk` files. The system books themselves are resource containers; they do not contain the OpenScript handlers that drive lessons.
 
-OpenScript bytecode is stored in the page records. The keyword tables are NE resources 0x77 and 0x78 in `TB80CMP`. A decoder (`openscript_decode.py`) now correctly expands both the keyword lookups and the 0xC0–0xFF back-references, producing readable handlers (“go to page "P400"”, “send next”, etc.). For `9e954d01.tbk` this yielded dozens of usable handlers.
+OpenScript bytecode is stored in the page records. The keyword tables are NE resources 0x77 and 0x78 in `TB80CMP`. A decoder now correctly expands both the keyword lookups and the 0xC0–0xFF back-references, producing readable handlers (“go to page "P400"”, “send next”, etc.). For `9e954d01.tbk` this yielded dozens of usable handlers.
 
 Polygon geometry (the case that has been solved) is stored in `14 00 00` subtype-0 records whose kind field is `04 00`. The point count is a word at a known offset, followed by x,y twip pairs. Screen coordinates are obtained by the scale `(stored * 96 + 720) / 1440` (equivalently stored/15 when the DPI factors are 96). Fill color is a dword in the same record. This layout was confirmed both statically and by live GDI!POLYGON traces.
 
@@ -22,10 +22,10 @@ Polygon geometry (the case that has been solved) is stored in `14 00 00` subtype
 
 Several generations of clean-room readers exist:
 
-- Early HTML/XML viewers (`viewer`, `viewer2`, `viewer3`) that walk the page marker, extract text and quoted jumps, and present a frame-plus-book UI.
-- Maybe2 / Maybe4 lessonshells: JSON that contains pages, Next/Back items, quiz choices, and decoded script. The shell walks `gotoPageList`, `setupQuizPage`, and answer handling. Logic Families under Maybe2 is the best rendering achieved so far.
-- `runtime/` and `runtime_cpp/`: Python and C++ packages that parse a book and emit HTML or drive a simple player. System-book stubs supply the path manager, bookmarking, and popup behavior that lessons expect.
-- Brickwall: a self-contained `tbk_gui.py` + HTML UI that serves either a raw `.tbk` or a lessonshell JSON, showing page lists, field text, and quoted jumps. Graphics are still omitted.
+- Early HTML/XML viewers walk the page marker, extract text and quoted jumps, and present a frame-plus-book UI.
+- Lessonshell readers hold pages, Next/Back items, quiz choices, and decoded script. The shell walks `gotoPageList`, `setupQuizPage`, and answer handling. Logic Families is the best rendering achieved so far.
+- Python and C++ packages parse a book and emit HTML or drive a simple player. System-book stubs supply the path manager, bookmarking, and popup behavior that lessons expect.
+- A self-contained GUI serves either a raw `.tbk` or a lessonshell JSON, showing page lists, field text, and quoted jumps. Graphics are still omitted.
 
 All of these can already display the textual content, navigation, and quizzes of books that resemble Logic Families. They do not yet paint arbitrary polygons, arcs, curves, or placed bitmaps for the rest of the corpus.
 
@@ -61,17 +61,26 @@ Secondary gaps are:
 - Robust handling of system-book and cross-book jumps for every lesson, not just Logic Families.
 - A convenient way to log the fast open path (SoftICE `BPX \ldots DO` logging, a Watcom debugger session, or a thin logging proxy in the style of the existing TB80BMP proxy).
 
-## 7. How to read the artifacts
+## 7. What is in this repository
 
-| Area | Location | What it contains |
-|------|----------|------------------|
-| Unpacked NE images | `artifacts/unpacked/`, `TB80BAS_ghidra.dll` | Images suitable for Ghidra |
-| Rename scripts & lists | `artifacts/rename/` | Confirmed function names |
-| OpenScript | `openscript_decode.py`, `handlers_extracted.json`, `openscript_notes.md` | Bytecode decoder and corpus |
-| Lessonshells & readers | `Maybe2/`, `Maybe4/`, `Brickwall/`, `runtime/` | Working text + navigation players |
-| Page & polygon experiments | `p430_*.png`, `polygon_render.py` | Solved geometry examples |
-| SoftICE kit | `SoftIce Stuff/` | ICEDUMP 6.021 and loaders |
-| System books as JS | `artifacts/sbk/` | Resource modules used by the shells |
-| Project memory | `.grok/project_memory.md` | Chronological facts and bookmarks |
+This repository is the written record. It does not contain the binaries, the course books, or the reader source.
+
+| Area | Where |
+|------|--------|
+| Status, architecture, naming | `01_Overview.pdf`, `02_Architecture.pdf`, `03_Naming_Progress.pdf`, and the Markdown beside them |
+| Confirmed function names | `Modules/tb80*_knownnames/` |
+| On-disk records and geometry | `BookFormat/` |
+| OpenScript decoder notes | `OpenScript/` |
+| SoftICE sessions | `SoftICE/` |
+| Clean-room reader status | `Runtimes/` |
+| Double-sided binder | `_production/TBWorldview_printable.pdf` |
+
+Code that used to be cited by local folder name lives in other repositories:
+
+- Unpacking the Optloader-wrapped NE images: [squirelworks/toolbookunpacker](https://github.com/squirelworks/toolbookunpacker)
+- The modern viewer: [squirelworks/Foolbook](https://github.com/squirelworks/Foolbook)
+- Hosting the 8.0 runtime: [squirelworks/TBpipeline](https://github.com/squirelworks/TBpipeline)
+
+Rename scripts, carved bitmaps, polygon experiments, and the SoftICE kit are working files. They are not published here. The names those scripts confirmed are the lists under `Modules/`.
 
 The work has already extracted the readable content and the navigation logic from the books and has produced usable modern viewers for the best-understood lessons. The remaining task is to finish the geometry translation so that the same viewers can paint the diagrams that the original 16-bit runtime drew.

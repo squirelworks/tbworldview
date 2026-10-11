@@ -1,16 +1,16 @@
 # TBWorldview
 
-Printable documentation for the ToolBook 8 reverse-engineering work.
+Written record of the ToolBook 8 reverse-engineering work.
 The books are Navy electronics lessons that ran in Click2learn ToolBook II 8.1 shells.
 The engine is the 16-bit Asymetrix runtime `TB80RTM`.
 
-Snapshot 2026-10-11.
+This repository is the notes. It does not contain the ToolBook binaries, the course books, or the reader source.
 
-## Binder
+## Print
 
-[`.production/TBWV1.0.0_printable.pdf`](.production/TBWV1.0.0_printable.pdf) is the double-sided binder PDF (42 pages). Each major section starts on a recto page. Print it duplex, flip on the long edge.
+[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder. Each major section starts on a right-hand page. Print it duplex, flip on the long edge.
 
-## This directory
+## In this directory
 
 - `00_Index.pdf` — package map
 - `01_Overview.pdf` — status of the work
@@ -25,3 +25,9 @@ Snapshot 2026-10-11.
 - `OpenScript/` — bytecode decoder notes
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
+
+## Related repositories
+
+- [toolbookunpacker](https://github.com/squirelworks/toolbookunpacker) — unpacks the Optloader-wrapped NE images
+- [Foolbook](https://github.com/squirelworks/Foolbook) — modern viewer
+- [TBpipeline](https://github.com/squirelworks/TBpipeline) — hosts the 8.0 runtime

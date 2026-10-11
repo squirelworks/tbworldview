@@ -253,7 +253,7 @@ end
 
 ## 8. How This Maps to the Modern Readers
 
-The clean-room players (Maybe2/4, Brickwall `tbk_gui`, `runtime/`) implement:
+The clean-room readers implement the following. Their source is not in this repository; the viewer is [Foolbook](https://github.com/squirelworks/Foolbook) and the host is [TBpipeline](https://github.com/squirelworks/TBpipeline).
 
 1. Walk `80 65` pages and `14 00 00` chunks.
 2. Extract text properties and quoted page jumps.

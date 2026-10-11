@@ -6,18 +6,20 @@ Generated 2026-10-11. Brute-force pattern naming across decompiled modules.
 
 | Module | Unique | Nameable | Confirmed | Script |
 |--------|--------|----------|-----------|--------|
-| TB80BAS | 3,739 | 650 | **12** | rename/rename_bas.py |
-| TB80RTM | 2,669 | 873 | **8** | rename/rename_rtm.py |
-| TB80BMP | 381 | 99 | **11** | rename/rename_bmp.py |
-| TB80CMP | 1,058 | 59 | **8** | rename/rename_cmp.py |
-| TB80UTL | 192 | 79 | **7** | rename/rename_utl.py |
-| TB80W16 | 330 | 57 | **8** | rename/rename_w16.py |
-| TB80LNL | 805 | 98 | **7** | rename/rename_lnl.py |
-| TB80MM | 191 | — | **7** | rename/rename_mm.py |
-| TB80RCR | 323 | — | **9** | rename/rename_rcr.py |
-| TB80FLT | 430 | — | **8** | rename/rename_flt.py |
-| TB80NET | 513 | — | **8** | rename/rename_net.py |
+| TB80BAS | 3,739 | 650 | **12** | rename_bas.py |
+| TB80RTM | 2,669 | 873 | **8** | rename_rtm.py |
+| TB80BMP | 381 | 99 | **11** | rename_bmp.py |
+| TB80CMP | 1,058 | 59 | **8** | rename_cmp.py |
+| TB80UTL | 192 | 79 | **7** | rename_utl.py |
+| TB80W16 | 330 | 57 | **8** | rename_w16.py |
+| TB80LNL | 805 | 98 | **7** | rename_lnl.py |
+| TB80MM | 191 | — | **7** | rename_mm.py |
+| TB80RCR | 323 | — | **9** | rename_rcr.py |
+| TB80FLT | 430 | — | **8** | rename_flt.py |
+| TB80NET | 513 | — | **8** | rename_net.py |
 | **Total** | **~10,991** | **~1,918** | **93** | — |
+
+The script names are the working files that produced these rows. They are not in this repository. The names they confirmed are under `Modules/`.
 
 ## Coverage
 
@@ -106,10 +108,10 @@ Generated 2026-10-11. Brute-force pattern naming across decompiled modules.
 
 ## Minor modules (2026-10-11 00:47)
 
-### JPG (1) — `rename/rename_jpg.py`
+### JPG (1) — `rename_jpg.py`
 - JpgAlloc
 
-### VBX (6) — `rename/rename_vbx.py`
+### VBX (6) — `rename_vbx.py`
 - VbxCreateWindow, VbxBitBlt, VbxBitBlt2
 - VbxAlloc, VbxAlloc2, VbxAlloc3
 
