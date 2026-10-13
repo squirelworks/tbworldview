@@ -12,7 +12,7 @@ The courses themselves are Navy electronics CAI (not the drug-abuse institute of
 
 Page objects are the only records that begin with the marker `80 65 00 05 00 02 02`. Inside each page the widgets are nested chunks that begin `14 00 00`. A typical property block starts `14 00 00 01`. Field text is stored as a `Text` property (length-prefixed, often with a leading CRLF). Standard property IDs (bounds = 0x4004, text = 0x402e, script = 0x4023, vertices = 0x4034, etc.) were recovered from NE resource type 0x2d1 / id 0x2d0 in `TB80BAS`.
 
-Object-type names (Page, Button, Field, Picture, Polygon, Arc, Curve, Rectangle, etc.) live in a classification table inside `TB80UTL.DLL` and are also present as resources in the system `.sbk` files. The system books themselves are resource containers; they do not contain the OpenScript handlers that drive lessons.
+Object-type names (Page, Button, Field, Picture, Polygon, Arc, Curve, Rectangle, etc.) live in a classification table inside `TB80UTL.DLL` and are also present as resources in the system `.sbk` files. The system books are ordinary books. Their scripts have not been fully read. An earlier sentence that called them resource containers with no handlers is retired as WV-024.
 
 OpenScript bytecode is stored in the page records. The keyword tables are NE resources 0x77 and 0x78 in `TB80CMP`. A decoder now correctly expands both the keyword lookups and the 0xC0–0xFF back-references, producing readable handlers (“go to page "P400"”, “send next”, etc.). For `9e954d01.tbk` this yielded dozens of usable handlers.
 
@@ -89,6 +89,7 @@ This repository is the written record. It does not contain the binaries, the cou
 | Clean-room reader status | `Runtimes/` |
 | Module roles and export ordinals | `Modules/module_catalog.md` |
 | ToolBook 11.5 and the `.TBKX` export | `SME/` |
+| Claim ledger (draft, not the `v1.0.0` release) | `Worldview/` |
 | Double-sided binder | `_production/TBWorldview_printable.pdf` |
 
 Code that used to be cited by local folder name lives in other repositories:

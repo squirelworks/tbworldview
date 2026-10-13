@@ -27,6 +27,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
 - `SME/` — the ToolBook 11.5 `.TBKX` export, from correspondence with JohnDoe1
+- `Worldview/` — the claim ledger. Known, thought, conjecture, and not true. Draft of the next release. `v1.0.0` is still the published one.
 
 ## Related repositories
 
