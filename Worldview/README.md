@@ -6,6 +6,8 @@ It is not a release until a tag says so.
 
 The older chapters stay. They are the narrative. When a chapter and the ledger disagree, the ledger wins.
 
+The printable binder is the published release. It is rebuilt when that release is cut, and not when this ledger changes.
+
 ## Grades
 
 | Grade | Meaning |

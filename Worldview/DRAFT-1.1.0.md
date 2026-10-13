@@ -9,7 +9,7 @@ Not a release. Do not tag this. `v1.0.0` stays the published release until that 
 
 ## What this draft does not do
 
-- It does not rebuild `_production/TBWorldview_printable.pdf`. The binder is the `v1.0.0` print.
+- It does not rebuild `_production/TBWorldview_printable.pdf`. The binder is rebuilt only when a release is cut. Until then it stays the `v1.0.0` print.
 - It does not retag the module lists or the older PDFs.
 - It does not contain personal names. JohnDoe1 remains the only mask.
 
