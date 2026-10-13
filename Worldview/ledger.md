@@ -15,6 +15,10 @@ Written 2026-10-13. The engine notes cite [squirelworks/TBpipeline](https://gith
 | WV-008 | Thought | A real Win16 return is the only way the Unicorn host gets further. |
 | WV-009 | Conjecture | ToolBook 11.5 can export an 8.1 lesson as `.TBKX`. |
 | WV-010 | Not true | On-disk `14 00 00 01` becomes `14 00 00 11` in memory. |
+| WV-027 | Known | ToolBook 8.1 calls 16-bit `USER`, `GDI`, and `KERNEL`, not `USER32`. |
+| WV-028 | Known | Windows 98 can step this engine. 32-bit XP can run it. 64-bit Windows cannot. |
+| WV-029 | Known | Published users are training shops and the Navy lessons on disk, not a living authoring market. |
+| WV-030 | Thought | Someone outside this set who still holds a native 8.x book has the same problem. |
 
 ## Known
 
@@ -94,6 +98,27 @@ The 1.5 `PHYSSIZE` index is not present in these 8.1 books. `TB80RMT` is not on 
 Evidence: the search of the 8.1 books, the opener's import set, the unpacker, and the decoder notes.
 Falsify: an 8.1 lesson that contains a `PHYSSIZE` index, or a lesson open that loads `TB80RMT` before the first page.
 
+### WV-027
+
+ToolBook II 8.1 does its work as Win16. The 32-bit launcher hands the book to `TB80RTM`. Painting goes through 16-bit `GDI`. The startup list of missing `USER32`, `GDI32`, and `KERNEL32` is not a broken install. Those are not the DLLs this runtime calls.
+
+Evidence: the NE images, the ordinal imports, and the pipeline startup log that reports those 32-bit names absent and continues. The longer account is `environments.md`.
+Falsify: a lesson open on Windows 98 or XP that calls `USER32` for `SetMessageQueue` or `Polygon`.
+
+### WV-028
+
+Windows 98 is the decompile floor because SoftICE can step the 16-bit segments there. 32-bit Windows XP runs the same lessons inside `NTVDM`, and it is a poor place to single-step `TB80RTM` from the 32-bit launcher. 64-bit Windows has no `NTVDM` and cannot run 8.1 at all. ToolBook 9.0 replaced this engine with a 32-bit one. 11.5 is that later program.
+
+Evidence: the project's own choice of machines, Microsoft's description of `NTVDM`, and the version history (9.0 in 2007, 11.5 in December 2012, support ended 31 December 2021).
+Falsify: a 64-bit system that starts `TB80RTM` without emulating a 16-bit CPU, or a single-step of this engine on XP that sees object `+0x0F` as clearly as Windows 98.
+
+### WV-029
+
+The books in this project were written by Nida Corporation for Navy electronics training. Outside that set, published accounts name other training users of the authoring tools: Northrop Grumman on Air Force aircrew lessons, a 1997 Navy demonstration aboard the USS Princeton, a Pensacola course-designer pilot, an Air Force course-management pilot at Randolph, Buckman Laboratories' learning center, and a UK user conference in 1994. A marketing line that lists AT&T, Lucent, MetLife, and Boeing is not a customer list. There is no present market for new ToolBook courses. Support ended in 2021.
+
+Evidence: the lesson copyright pages, and the sources in `audience.md`.
+Falsify: a current vendor offering ToolBook 8.1 authoring, or one of those marketing names documented as an 8.1 runtime site.
+
 ## Thought
 
 ### WV-007
@@ -131,6 +156,13 @@ Later live `80 65` objects were seen with `14 00 00 02`. The working idea is tha
 
 Evidence: the live dumps that showed `02`. No dump has shown the old `11`.
 Falsify: a live object whose header is `01` after `CDBFILEOPEN`, or a meaning for `02` that the painter ignores.
+
+### WV-030
+
+The practical audience now is whoever still has a native 8.x book and cannot open it on 64-bit Windows. That includes other CBT discs from the same era, not only these lessons. It does not include people choosing an authoring tool.
+
+Evidence: WV-028, and the absence of a product. This remains a thought until a second corpus is actually in hand.
+Falsify: a native 8.x book that opens on 64-bit Windows without a 16-bit emulator, or a second corpus that does not use the same shell.
 
 ## Conjecture
 

@@ -1,8 +1,8 @@
 # Worldview
 
 This is the ledger for what the project holds about ToolBook II 8.1.
-`v1.0.0` is the published release. This ledger is the draft of the next one.
-It is not a release until a tag says so.
+It is the experimental build. The printable binder is the stable build, and it changes only when a release is cut.
+`v1.0.0` is that release. This ledger is not one until a tag says so.
 
 The older chapters stay. They are the narrative. When a chapter and the ledger disagree, the ledger wins.
 

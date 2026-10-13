@@ -4,8 +4,10 @@ Not a release. Do not tag this. `v1.0.0` stays the published release until that 
 
 ## What this draft adds
 
-- `Worldview/README.md` — how a claim is added, corrected, or retired without deleting it.
+- `Worldview/README.md` — how a claim is added, corrected, or retired without deleting it. The ledger is the experimental build. The binder is the stable one.
 - `Worldview/ledger.md` — known, thought, conjecture, and not true, with stable ids.
+- `Worldview/environments.md` — how Win16, Windows 98, and Windows XP look to ToolBook 8.1.
+- `Worldview/audience.md` — who published sources say used it, and who would still have a reason to care.
 
 ## What this draft does not do
 
