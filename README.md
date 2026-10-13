@@ -8,7 +8,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 
 ## Print
 
-[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for the published release. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
+[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for `v1.0.0r1`. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
 
 ## In this directory
 

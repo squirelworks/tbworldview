@@ -1,7 +1,7 @@
 # Ledger
 
-Draft for the next release. Not released. `v1.0.0` remains the published package.
-Written 2026-10-13. The engine notes cite [squirelworks/TBpipeline](https://github.com/squirelworks/TBpipeline) at `a106ef0` unless a claim says otherwise.
+Stable print: 1.0.0r1. Edits after that tag are experimental until the next release.
+Written 2026-10-13. The engine notes cite TBpipeline at `a106ef0` unless a claim says otherwise.
 
 | Id | Grade | Statement |
 |---|---|---|
