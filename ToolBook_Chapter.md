@@ -89,7 +89,7 @@ This repository is the written record. It does not contain the binaries, the cou
 | Clean-room reader status | `Runtimes/` |
 | Module roles and export ordinals | `Modules/module_catalog.md` |
 | ToolBook 11.5 and the `.TBKX` export | `SME/` |
-| Claim ledger, as printed in `v1.0.0r1` | `Worldview/` |
+| Claim ledger, as printed in `v1.0.0r2` | `Worldview/` |
 | Double-sided binder | `_production/TBWorldview_printable.pdf` |
 
 Code that used to be cited by local folder name lives in other repositories:

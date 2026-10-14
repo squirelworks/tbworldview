@@ -8,7 +8,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 
 ## Print
 
-[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for `v1.0.0r1`. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
+[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for `v1.0.0r2`. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
 
 ## In this directory
 
@@ -27,10 +27,10 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
 - `SME/` — the ToolBook 11.5 `.TBKX` export, from correspondence with JohnDoe1
-- `Worldview/` — the experimental ledger, plus tangents on the Win16 environments and on who used ToolBook. The binder is not rebuilt from this. `v1.0.0` is still the published print.
+- `Worldview/` — the ledger, the reader notes, the Win16 tangent, and who used ToolBook. The binder is rebuilt only for a release. The current print is `v1.0.0r2`.
 
 ## Related repositories
 
 - [toolbookunpacker](https://github.com/squirelworks/toolbookunpacker) — unpacks the Optloader-wrapped NE images
 - [Foolbook](https://github.com/squirelworks/Foolbook) — modern viewer
-- [TBpipeline](https://github.com/squirelworks/TBpipeline) — hosts the 8.0 runtime
+- [TBpipeline](https://github.com/squirelworks/TBpipeline) — the reader and the 16-bit hosts. `documentation/` at `93ce117` is the record this print cites.

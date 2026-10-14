@@ -1,7 +1,7 @@
 # Ledger
 
-Stable print: 1.0.0r1. Edits after that tag are experimental until the next release.
-Written 2026-10-13. The engine notes cite TBpipeline at `a106ef0` unless a claim says otherwise.
+Stable print: 1.0.0r2. Edits after that tag are experimental until the next release.
+The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The reader package there is `1.0.0r6`.
 
 | Id | Grade | Statement |
 |---|---|---|
@@ -19,6 +19,13 @@ Written 2026-10-13. The engine notes cite TBpipeline at `a106ef0` unless a claim
 | WV-028 | Known | Windows 98 can step this engine. 32-bit XP can run it. 64-bit Windows cannot. |
 | WV-029 | Known | Published users are training shops and the Navy lessons on disk, not a living authoring market. |
 | WV-030 | Thought | Someone outside this set who still holds a native 8.x book has the same problem. |
+| WV-031 | Known | `.tbk` and `.sbk` are the same container. The page name is at offset `0x0B`. |
+| WV-032 | Known | OpenScript `C0`–`DF` is a back-reference, not a call. |
+| WV-033 | Known | A `buttonClick` on `nida81.tbk` `P20000` goes to `P20001` because the handler says so. |
+| WV-034 | Known | `render.html` is written only with `--dbgrender`. |
+| WV-035 | Known | The three hosts are not one program, and they do not share a Windows table. |
+| WV-036 | Known | Pass 06 still exits after `TB80.INI`. The entry does not ask for the book. |
+| WV-041 | Not true | Reader navigation is only a quoted page id. |
 
 ## Known
 
@@ -54,19 +61,23 @@ Falsify: a P430 point that the real runtime paints and this layout misses, or a 
 
 ### WV-005
 
-The clean-room reader walks `80 65` pages, pulls field text, and follows quoted page ids such as `P400`. On `9e954d01.tbk` that is 129 pages. It also extracts 66 Windows BMPs from the book and one tied to P1290, and it draws 18 pages of shapes (23 files, because a page can have more than one curve). The pictures and the shapes are not placed. Navigation is the quoted id, not the bytecode. Quizzes are scraped text, not scored.
+The clean-room reader walks `80 65` pages and pulls field text. On `9e954d01.tbk` that is 129 pages. It extracts Windows BMPs the book already holds, and it draws curves as separate files. The pictures and the shapes are not placed. Quizzes are scraped text, not scored.
 
-Evidence: a TBpipeline `1.0.0r4` run on that book. The debug folder's `render.html` is this reader. Stage 2a runs because the engine did not open the book.
-Falsify: a handler whose target is only a bytecode operand and is still followed correctly, or a page whose bitmap is placed by this reader.
+As of TBpipeline `93ce117`, a click is no longer only a quoted page id. See WV-033. The `1.0.0r1` wording of this entry said navigation was the quoted id and not the bytecode. That sentence is retired as WV-041. The reader is still not the engine.
+
+Evidence: a `1.0.0r4` run on `9e954d01.tbk`, and `documentation/openscript.md` at `93ce117`.
+Falsify: a page whose bitmap is placed by this reader, or a quiz that scores.
 
 ### WV-006
 
-`TB80RTM` is entered at segment 2 offset `0x35A`. As of TBpipeline `a106ef0`, the experimental host gets past the old `0x20:0x36c` fault, opens `TB80.INI` and `TB80enu`, binds 580 ToolBook DLL entries, and then exits through DOS with code 0. The book is not among the files it opened. `USER.266` is `SetMessageQueue`. Reaching it is not startup finishing.
+`TB80RTM` is entered at segment 2 offset `0x35A`, which is the entry after the unpacker. The image is self-loading. Segment 1 is the unpacker, and the host runs that stub once rather than calling `BootApp`.
 
-An earlier integrated run, before that commit, died 18 bytes after the entry. The instruction was `les ax, [di-66h]`. The address was unmapped. No Win16 call had run.
+As of TBpipeline `93ce117`, pass 06 maps six DLLs, calls their entries, asks for `TB80.INI` and `TB80enu`, and exits through DOS with code 0. The entry never asks for the lesson. Only a path ending in `.tbk` or `.sbk` would get a handle. `newl` dies earlier, inside startup. `neww` stops on an ordinal that has no contract, and it has not reached this open. `USER.266` is `SetMessageQueue`. Reaching it is not startup finishing.
 
-Evidence: `nehost/rtm - pass 06/PASS06.txt` at `a106ef0`, and the `1.0.0r4` launch log from the earlier run.
-Falsify: a host log from this tree whose open list contains the lesson `.tbk` and whose fault is not an exit.
+The `1.0.0r1` print cited `a106ef0` for the same exit. An earlier run, before that commit, died 18 bytes after the entry on an unmapped `les`. That fault is not the current stop.
+
+Evidence: `documentation/host.md` and `tbpipeline_bf/known-bugs.md` at `93ce117`. The pass 06 log is still the record from the INI exit.
+Falsify: a host log from one of the three trees whose open list contains the lesson and whose stop is not an exit.
 
 ### WV-011
 
@@ -119,6 +130,54 @@ The books in this project were written by Nida Corporation for Navy electronics 
 Evidence: the lesson copyright pages, and the sources in `audience.md`.
 Falsify: a current vendor offering ToolBook 8.1 authoring, or one of those marketing names documented as an 8.1 runtime site.
 
+### WV-031
+
+A `.tbk` and a `.sbk` are the same container. The extension is the role. The reader looks for magic `0x22222222` at `0xC00`, then anywhere if the stub is not that length. The page name is a C string at record offset `0x0B`. Field text is the bytes `Text`, two zero bytes, a length, then the characters.
+
+The `1.0.0r1` print of WV-002 said the book stream starts at `0xC00`. That is the usual case. It is not the only place the reader looks.
+
+Evidence: `documentation/book.md` at `93ce117`.
+Falsify: a system book whose stream is not this container, or a page whose name is not at `0x0B`.
+
+### WV-032
+
+OpenScript handlers are compressed by `TB80CMP`. The expander is `COMPILEREXPANDTEXT`. Bytes `00`–`7F` are literal. `80`–`BF` are keywords from resource `0x77`. `C0`–`DF` copy earlier compressed bytes. `E0`–`FE` are a newline or spaces. `FF` repeats the next byte. The copy is text reuse. A call is the handler name in that text. A `?` in the expansion is the character.
+
+The expander has to see the whole file. A slice fails when the distance lands before the slice.
+
+Evidence: `documentation/openscript.md` at `93ce117`. The keyword resource was already WV-014.
+Falsify: a back-reference that transfers control, or a `?` that the expander inserted because an opcode was missing.
+
+### WV-033
+
+`--open` expands handlers and does not start the CPU. On `nida81.tbk` that is 43 pages and 100 handlers whose names are still plain text. `P20000`'s `buttonClick` sets `lastbook` and `nextpage`, then goes to page `P20001` of `nida81.tbk`. A later page that only says `go to page (nextpage) of book (lastbook)` is the return. The same steps are what the buttons in `render.html` run. Anything past that subset is not executed.
+
+Evidence: `documentation/openscript.md` and `documentation/book.md` at `93ce117`.
+Falsify: a click on `P20000` that lands somewhere else while that handler is the one that ran, or a scored quiz from this runner.
+
+### WV-034
+
+`render.html` is written only with `--dbgrender`. A launch that exits does not draw a page. `--theme default` is a Windows 95 window. `--theme modern` is the dark reader. Stage 2b counts pages that had something to draw. The file count counts PNGs. P420 has four curves, so 18 pages and 23 files are both reported, and they are not the same count.
+
+Evidence: `tbpipeline_bf/CHANGELOG.md` for `1.0.0r6`, and `documentation/book.md` at `93ce117`.
+Falsify: a run with no `--dbgrender` that still writes `render.html`.
+
+### WV-035
+
+TBpipeline is three trees. `tbpipeline_bf` is the reader and a host that returns `AX = 1` and continues. `tbpipeline_newl` stops when `KERNEL` or `USER` is not in its table. `tbpipeline_neww` stops when an ordinal has no contract, and it does not guess the pop size. They are not merged. [openscript_analysis](https://github.com/squirelworks/openscript_analysis) is a sibling repository, not a fourth tree.
+
+Evidence: `documentation/trees.md` and `documentation/intent.md` at `93ce117`.
+Falsify: a commit that builds one Windows table for all three and treats a result in `newl` as a fix in `bf`.
+
+### WV-036
+
+Pass 06 calls DLL entries in this order: `TB80RCR`, `TB80LNL`, `TB80OLE`, `TB80W16`, `TB80UTL`, then `TB80BAS`. Each is entered with `DI` set to its data segment and `CX` set to its heap size. `__WINFLAGS` (`KERNEL.178`) is the constant `0x0C25`. Patching it to a thunk makes the C runtime leave. `KERNEL.102` with `AH = 4Ch` is `DOS3Call`, and that is the DOS exit in the log. `USER.176` `LoadString` pops 10 bytes. `USER.179` metric `0x29` (`SM_PENWINDOWS`) stays 0. OLE `CreateDispTypeInfo` returns HRESULT 0. `AX = 1` there is `S_FALSE`.
+
+`TB80BMP` ordinal 3, `TBKBITMAP`, is the decoder for a compressed picture. The probe stops at the unbound far call `0x1FCD`. The reader copies Windows BMPs and does not call this ordinal.
+
+Evidence: `documentation/host.md` and `tbpipeline_bf/WHY.md` at `93ce117`.
+Falsify: a pass 06 log that opens the lesson, or a compressed picture the reader shows without that ordinal returning a bitmap.
+
 ## Thought
 
 ### WV-007
@@ -138,7 +197,9 @@ Falsify: a click that jumps to an address stored in the page record, or a lesson
 
 ### WV-016
 
-The system books (`tb80r.sbk`, `tb80hyp.sbk`, `tb80anm.sbk`, and the four `nc81*.sbk` files) are ordinary books. They hold the shell: path, quiz, and status behavior that is not in `TB80RTM`. Their handlers have not been fully read. `linkDLL` modules (`TBDLG`, `TBWIN`, `TBDOS`, `TBREG`, `TBDB3`, `TBPDX`, `TBCBT`) are not loaded unless a handler asks.
+The system books (`tb80r.sbk`, `tb80hyp.sbk`, `tb80anm.sbk`, and the four `nc81*.sbk` files) are ordinary books. They hold shared handlers the lessons call. `--open` expands those streams and lists them under `scripts` when they do not sit inside a page. The runner does not execute them. `linkDLL` modules (`TBDLG`, `TBWIN`, `TBDOS`, `TBREG`, `TBDB3`, `TBPDX`, `TBCBT`) are not loaded unless a handler asks.
+
+The `1.0.0r1` wording said the handlers had not been fully read. The names can now be expanded. The bodies are still not the thing a click runs.
 
 Falsify: a system book whose stream is not a book, or a lesson open that loads `TBCBT` before any script runs.
 
@@ -235,3 +296,10 @@ The `a106ef0` host passes the old fault and exits without opening the lesson. A 
 The product-name string in the host was recovered from `TB80UTL`.
 
 The host writes a non-empty placeholder so the empty-buffer check does not exit. The id `0x0FBD` is the claim. The letters in the placeholder are not. Retired 2026-10-13, at the same time the stub was written, so it would not be promoted later.
+
+### WV-041
+
+Reader navigation is only a quoted page id, and not the bytecode.
+
+That was the `1.0.0r1` wording inside WV-005. `93ce117` follows `buttonClick` for `go to page "P..."` and for `go to page (nextpage)`. The rest of OpenScript is still not executed, which is WV-033, not this claim. Retired 2026-10-14.
+
