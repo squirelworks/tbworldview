@@ -1,9 +1,9 @@
 # Worldview
 
 This is the ledger for what the project holds about ToolBook II 8.1.
-The binder tagged `v1.0.0r2` is the stable print of this ledger.
+The binder tagged `v1.0.0r3` is the stable print of this ledger.
 Edits after that tag are experimental until the next release. The binder is rebuilt only then.
-`v1.0.0` and `v1.0.0r1` are the previous prints.
+`v1.0.0`, `v1.0.0r1`, and `v1.0.0r2` are the previous prints.
 
 The older chapters stay. They are the narrative. When a chapter and the ledger disagree, the ledger wins.
 

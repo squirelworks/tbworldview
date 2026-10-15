@@ -1,7 +1,7 @@
 # Ledger
 
-Stable print: 1.0.0r2. Edits after that tag are experimental until the next release.
-The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The reader package there is `1.0.0r6`.
+Stable print: 1.0.0r3. Edits after that tag are experimental until the next release.
+The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The reader package there is `1.0.0r6`. The decompile notes cite TBdecompile at `9a7d2cf`.
 
 | Id | Grade | Statement |
 |---|---|---|
@@ -26,6 +26,12 @@ The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The
 | WV-035 | Known | The three hosts are not one program, and they do not share a Windows table. |
 | WV-036 | Known | Pass 06 still exits after `TB80.INI`. The entry does not ask for the book. |
 | WV-041 | Not true | Reader navigation is only a quoted page id. |
+| WV-042 | Known | A content rectangle is four twip words, a fill, and the marker `01 00 00 04`. |
+| WV-043 | Known | `FUN_12c8_0ef8` copies four words that are not the raw disk record. |
+| WV-044 | Known | A page offset table is a content index, not a Group. |
+| WV-045 | Known | A gap in the Ghidra HTML is not proof the function is absent. |
+| WV-046 | Known | 11.5 with `saveSpecial=true` writes a `.TBK TBX` folder. A `.TBKX` is that folder zipped. |
+| WV-047 | Not true | ToolBook 8.1 is a 32-bit program. |
 
 ## Known
 
@@ -178,6 +184,47 @@ Pass 06 calls DLL entries in this order: `TB80RCR`, `TB80LNL`, `TB80OLE`, `TB80W
 Evidence: `documentation/host.md` and `tbpipeline_bf/WHY.md` at `93ce117`.
 Falsify: a pass 06 log that opens the lesson, or a compressed picture the reader shows without that ordinal returning a bitmap.
 
+### WV-042
+
+A content rectangle is bounds only. In the page blob the tail is four twip words, a zero dword, a fill dword, then `01 00 00 04`. Screen position is twips / 15. On P1040 of `9e954d01.tbk` that is 28 pin boxes and 2 body boxes. The pin tip is not an 11-point list. Paint expands it from the box. A later walk of the same book found 961 of the marker.
+
+Evidence: the page bytes at file `0x19C03A`, and the marker count in the working papers condensed at TBdecompile `9a7d2cf`.
+Falsify: a pin on P1040 whose tip is stored as vertices, or a rectangle of this shape that the runtime does not fill from those four words.
+
+### WV-043
+
+`CDBSENDCREATE` is `TB80BAS` ordinal 51, at `12c8:00bc`. It receives bounds as parameters. Nothing in BAS calls it by name. `FUN_12c8_0ef8`, which it reaches, copies source `+0x3E`, `+0x40`, `+0x42`, and `+0x44` onto the object at `+0x17`, `+0x19`, `+0x1B`, and `+0x1D`. In a raw polygon those source offsets are point data, not those fields. The structure the function sees has already been rebuilt. The step that rebuilds it is still unnamed.
+
+`WM_PAINT` in `TB80RTM` calls `CLIENTTOPAGE`, then ordinal 26, `CDBPAINTCLIENT`. The painters are in BAS.
+
+Evidence: the BAS listing and the RTM paint path, condensed in TBdecompile `20261014/`.
+Falsify: a raw `14 00 00` record in which those four source offsets are the words that land at object `+0x17`, or a named caller of ordinal 51 inside BAS.
+
+### WV-044
+
+The ascending word table in a page, such as the 27 words at page `+0x8C3` on P1170, is an index into a `14 00 00 83` blob. The words are offsets of shape records, property blocks, and script chunks. A Group is a separate object. It is not this table.
+
+Evidence: the P1170 blob at file `0x1AB651` and the table at `0x1ABE97`. Script text sits in the blob. Stripping it left structured records, and the table still pointed at them.
+Falsify: a Group whose member list is that page-level table.
+
+### WV-045
+
+The Ghidra HTML export is not a complete disassembly. It has `??` regions. A function that reads `14 00 00` can sit in one of them. "Not in the HTML" means "not in the disassembled part."
+
+`FUN_1028_2680` is a filter registrar. `FUN_1008_2dc7` is the math dispatcher. Both were closed in the disassembled part, not by the HTML being silent.
+
+Evidence: the HTML coverage note and the two closures in TBdecompile `20261014/`.
+Falsify: a complete listing of `TB80BAS` in which every byte of code is a function, or one of those two functions turning out to parse a disk record.
+
+### WV-046
+
+ToolBook 11.5 writes the export when `Instructor115.ini` has `saveSpecial=true` under `[Options]`. The command is File, Save To XML, after F3 has put the book in Author level. The result is a folder named `<book>.TBK TBX`. A `.TBKX` is a ZIP of that folder. Opening the ZIP imports it. Bounds is required on a draw object. Vertices is optional. `9e954d01` has been exported this way. A TB90 install can hide the menu. A repair install of 11.5 puts it back.
+
+The `1.0.0r2` print of WV-009 said the steps had not been tried. They had, by the time of this print.
+
+Evidence: JohnDoe1's description, recorded without the personal name in TBdecompile `20261014/03-tbx.md`. The mail is not in this repository.
+Falsify: a 11.5 that writes this export with `saveSpecial` absent, or a `.TBKX` that is not a ZIP of that folder.
+
 ## Thought
 
 ### WV-007
@@ -229,9 +276,11 @@ Falsify: a native 8.x book that opens on 64-bit Windows without a 16-bit emulato
 
 ### WV-009
 
-If an 8.1 lesson opens in ToolBook 11.5, the hidden save will write a `.TBKX` whose XML is the same pages, objects, bounds, and scripts the `80 65` records hold. That would document the property block the 8.1 parser does not yet expand. It has not been tried. JohnDoe1 had not sent the steps as of 2026-10-12.
+If an 8.1 lesson opens in ToolBook 11.5, the export XML is the same pages, objects, bounds, and scripts the `80 65` records hold. The save itself has been done for `9e954d01`. See WV-046. What has not been done is the check that every disk record is an element in that XML. That check is still the point of the claim.
 
-Falsify: 11.5 refusing the lesson, or a `.TBKX` that has the media and does not have the object tree.
+The `1.0.0r2` wording said the steps had not arrived and the export had not been tried. The steps are in WV-046. The comparison is not.
+
+Falsify: a `.TBKX` of `9e954d01` that has the media and does not have the object tree, or a disk widget with no element in that export.
 
 ### WV-018
 
@@ -302,4 +351,10 @@ The host writes a non-empty placeholder so the empty-buffer check does not exit.
 Reader navigation is only a quoted page id, and not the bytecode.
 
 That was the `1.0.0r1` wording inside WV-005. `93ce117` follows `buttonClick` for `go to page "P..."` and for `go to page (nextpage)`. The rest of OpenScript is still not executed, which is WV-033, not this claim. Retired 2026-10-14.
+
+### WV-047
+
+ToolBook 8.1 is a 32-bit program, and 9.0 added a 64-bit one.
+
+JohnDoe1 said that. The images in this work are 16-bit NE. ToolBook 9.0 is the 32-bit product, which is why it runs on 64-bit Windows. The two accounts are not the same claim. The binaries win until a 32-bit 8.1 engine is actually in hand. Retired 2026-10-15, when the sentence was written down, so it would not be promoted.
 
