@@ -1,6 +1,6 @@
-# Knowledge Base notes (sanitized)
+# Knowledge Base notes
 
-Recorded 2026-10-19 from the preserved ToolBook Knowledge Base that JohnDoe1 continues to host after SumTotal retired the product on 31 December 2021. Personal name, email, and host URL are omitted per repository rules.
+Recorded 2026-10-19 from the ToolBook Knowledge Base that Denny Dedmore preserved and continues to host at https://dennydedmore.com/toolbook/knowledgebase/kb/ after SumTotal retired the product on 31 December 2021. He created the original Knowledge Base while at SumTotal and wrote the large majority of the articles. The site is public historical material.
 
 ## Activation (post-EOL)
 
