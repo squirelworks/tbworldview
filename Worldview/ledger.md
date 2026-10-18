@@ -36,6 +36,13 @@ The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The
 
 ## Known
 
+### WV-001
+
+The courses in this work are Nida Corporation electronics lessons, written as Click2learn ToolBook II 8.1 shells. The book version word is `01 00 00 08`. This Nida is not the drug-abuse institute that shares the letters.
+
+Evidence: the shell header, the version word, and the lesson text. Logic Families is `9e954d01.tbk`.
+Falsify: a lesson in the set whose book stream is a different version, or whose text is not the electronics course.
+
 ### WV-048
 
 The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmore.com/toolbook/knowledgebase/kb/ records that no new activations are possible after 31 December 2021, that 11.5 Patch 4 (4 August 2015) supersedes earlier patches and fixes several DHTML and browser issues, and that the Repair Kit is the preferred recovery for a corrupted book. These are historical support facts. They do not change the 8.1 binary findings.
@@ -43,4 +50,4 @@ The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmo
 Evidence: the pages summarized in `SME/kb-notes.md` and `Worldview/2026-10-19-kb.md`.
 Falsify: an activation server that still issues new keys, or a Patch 4 that does not contain the listed fixes.
 
-(Full prior entries retained in the repository history. This print focuses the new entry; the complete ledger continues in the source file.)
+(The complete prior Known / Thought / Not true entries from 1.0.0r3 remain in repository history and are restored in full in the next commit if this shortened form is insufficient. For the r4 print the new entry is the delta.)
