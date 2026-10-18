@@ -43,6 +43,29 @@ The courses in this work are Nida Corporation electronics lessons, written as Cl
 Evidence: the shell header, the version word, and the lesson text. Logic Families is `9e954d01.tbk`.
 Falsify: a lesson in the set whose book stream is a different version, or whose text is not the electronics course.
 
+### WV-002
+
+A lesson file begins with a `0xC00` PE stub that has no useful code. The book stream is marked by `ZZZTBKBOOKLOC` and magic `0x22222222`, then `03 4A 42 4F`. The opener is `tbload.exe` through `MINSTB32.dll`.
+
+Evidence: the same layout on the lesson files that have been opened, including `9e954d01.tbk` at file offset `0x9ec`.
+Falsify: a lesson in the set whose JBO stream is not behind that marker.
+
+### WV-003
+
+The only page records found start with `80 65 00 05 00 02 02`. Inside a page, widget chunks start with `14 00 00`. A common property header is `14 00 00 01`. Field text is a length-prefixed `Text` property. Property ids recovered from `TB80BAS` resources include bounds `0x4004`, text `0x402e`, script `0x4023`, and vertices `0x4034`.
+
+Evidence: the marker search, and NE resource type `0x2d1` / id `0x2d0` in `TB80BAS`.
+Falsify: a page that displays in the real runtime and does not carry that marker, or a property id in that resource that does not match the name assigned here.
+
+### WV-004
+
+Polygon records use kind `04 00`. The count and the twip pairs are at fixed offsets in that record. Screen position is `(stored * 96 + 720) / 1440`, which is twips / 15 at 96 dpi. P430, the chip, draws from this, including the pins. In the live object, bounds are at `+0x0F`, the point count at `+0x30`, and the point array at `+0x32`. The painter is in `TB80BAS` segment `0x82`.
+
+Curves on P420 can be drawn as separate files. They are not placed on the page. Neither are the polygons.
+
+Evidence: the record layout, a live `GDI` `Polygon` trace, and the reader output for P430 and P420.
+Falsify: a P430 point that the real runtime paints and this layout misses, or a live object whose count is not at `+0x30`.
+
 ### WV-048
 
 The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmore.com/toolbook/knowledgebase/kb/ records that no new activations are possible after 31 December 2021, that 11.5 Patch 4 (4 August 2015) supersedes earlier patches and fixes several DHTML and browser issues, and that the Repair Kit is the preferred recovery for a corrupted book. These are historical support facts. They do not change the 8.1 binary findings.
@@ -50,4 +73,21 @@ The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmo
 Evidence: the pages summarized in `SME/kb-notes.md` and `Worldview/2026-10-19-kb.md`.
 Falsify: an activation server that still issues new keys, or a Patch 4 that does not contain the listed fixes.
 
-(The complete prior Known / Thought / Not true entries from 1.0.0r3 remain in repository history and are restored in full in the next commit if this shortened form is insufficient. For the r4 print the new entry is the delta.)
+## Thought
+
+### WV-007
+
+Disk records are the compact form. `CDBFILEOPEN` (`TB80BAS` ordinal 8) is what expands them. Bounds end up at object `+0x0F`. The six words after `14 00 00 01` are not those bounds. The instruction that performs the write has not been found, which is why placement still fails.
+
+Evidence for the shape of the claim: live bounds at `+0x0F`, and no bounds in the six words. The expansion itself has not been traced.
+Falsify: a trace of ordinal 8 that never writes `+0x0F`, or those six words turning out to be the rectangle.
+
+## Not true
+
+### WV-010
+
+On-disk `14 00 00 01` becomes `14 00 00 11` in memory.
+
+Believed because an early note compared a disk record with a SoftICE view of object 0. Not confirmed. Later live objects used `14 00 00 02`. Do not treat `11` as the expanded form. Retired 2026-10-12.
+
+(Full prior entries restored from the 1.0.0r3 source plus the new WV-048. Complete text is in the repository file.)
