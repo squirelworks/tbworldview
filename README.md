@@ -8,7 +8,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 
 ## Print
 
-[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for `v1.0.0r3`. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
+[`_production/TBWorldview_printable.pdf`](_production/TBWorldview_printable.pdf) is the double-sided binder for `v1.0.0r4`. Each major section starts on a right-hand page. Print it duplex, flip on the long edge. Rebuild it when cutting a release, not when the notes change.
 
 ## In this directory
 
@@ -27,7 +27,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
 - `SME/` — the ToolBook 11.5 `.TBKX` export and Knowledge Base notes, from correspondence with Denny Dedmore (https://dennydedmore.com/toolbook/knowledgebase/kb/)
-- `Worldview/` — the ledger, the reader notes, the Win16 tangent, and who used ToolBook. The binder is rebuilt only for a release. The current print is `v1.0.0r3`.
+- `Worldview/` — the ledger, the reader notes, the Win16 tangent, and who used ToolBook. The binder is rebuilt only for a release. The current print is `v1.0.0r4`.
 
 ## Related repositories
 
