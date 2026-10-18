@@ -66,6 +66,15 @@ Curves on P420 can be drawn as separate files. They are not placed on the page. 
 Evidence: the record layout, a live `GDI` `Polygon` trace, and the reader output for P430 and P420.
 Falsify: a P430 point that the real runtime paints and this layout misses, or a live object whose count is not at `+0x30`.
 
+### WV-005
+
+The clean-room reader walks `80 65` pages and pulls field text. On `9e954d01.tbk` that is 129 pages. It extracts Windows BMPs the book already holds, and it draws curves as separate files. The pictures and the shapes are not placed. Quizzes are scraped text, not scored.
+
+As of TBpipeline `93ce117`, a click is no longer only a quoted page id. See WV-033. The `1.0.0r1` wording of this entry said navigation was the quoted id and not the bytecode. That sentence is retired as WV-041. The reader is still not the engine.
+
+Evidence: a `1.0.0r4` run on `9e954d01.tbk`, and `documentation/openscript.md` at `93ce117`.
+Falsify: a page whose bitmap is placed by this reader, or a quiz that scores.
+
 ### WV-048
 
 The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmore.com/toolbook/knowledgebase/kb/ records that no new activations are possible after 31 December 2021, that 11.5 Patch 4 (4 August 2015) supersedes earlier patches and fixes several DHTML and browser issues, and that the Repair Kit is the preferred recovery for a corrupted book. These are historical support facts. They do not change the 8.1 binary findings.
@@ -90,4 +99,4 @@ On-disk `14 00 00 01` becomes `14 00 00 11` in memory.
 
 Believed because an early note compared a disk record with a SoftICE view of object 0. Not confirmed. Later live objects used `14 00 00 02`. Do not treat `11` as the expanded form. Retired 2026-10-12.
 
-(Full prior entries restored from the 1.0.0r3 source plus the new WV-048. Complete text is in the repository file.)
+Full prior Known, Thought, and Not true entries from the 1.0.0r3 print are restored here along with WV-048. The complete text is the one in this file.
