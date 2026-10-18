@@ -33,3 +33,7 @@ JohnDoe1 had found the archival notes for the path from 8.1 through 11.5 to `.TB
 The 8.1 work is unchanged. Page markers, the OpenScript subset, and the polygon painter still stand. `.TBKX` is a second way to read the same books, if 11.5 will open them.
 
 When a machine is free, the test is: install 11.5 in a snapshotted virtual machine, open `9e954d01.tbk`, find the hidden save command, and compare the XML with the `80 65` records.
+
+## Knowledge Base notes
+
+Additional historical support material (activation constraints after EOL, Patch 4 contents, corruption recovery via the Repair Kit, and related publishing notes) is recorded in `kb-notes.md`. Personal identifiers remain omitted.
