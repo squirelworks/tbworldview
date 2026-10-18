@@ -26,7 +26,7 @@ This repository is the notes. It does not contain the ToolBook binaries, the cou
 - `OpenScript/` — bytecode decoder notes
 - `SoftICE/` — dynamic analysis
 - `Runtimes/` — clean-room reader status
-- `SME/` — the ToolBook 11.5 `.TBKX` export and sanitized Knowledge Base notes, from correspondence with JohnDoe1
+- `SME/` — the ToolBook 11.5 `.TBKX` export and Knowledge Base notes, from correspondence with Denny Dedmore (https://dennydedmore.com/toolbook/knowledgebase/kb/)
 - `Worldview/` — the ledger, the reader notes, the Win16 tangent, and who used ToolBook. The binder is rebuilt only for a release. The current print is `v1.0.0r3`.
 
 ## Related repositories
