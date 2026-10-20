@@ -1,7 +1,7 @@
 # Ledger
 
-Stable print: 1.0.0r4. The previous print was 1.0.0r3.
-The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The reader package there is `1.0.0r6`. The decompile notes cite TBdecompile at `9a7d2cf`.
+Stable print: 1.0.0r5. The previous print was 1.0.0r4.
+The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The reader package there is `1.0.0r6`. The decompile notes cite TBdecompile at `816dd12`. The script tools cite openscript_analysis at `v1.0.0r9`.
 
 | Id | Grade | Statement |
 |---|---|---|
@@ -33,6 +33,9 @@ The engine notes cite TBpipeline at `93ce117` unless a claim says otherwise. The
 | WV-046 | Known | 11.5 with `saveSpecial=true` writes a `.TBK TBX` folder. A `.TBKX` is that folder zipped. |
 | WV-047 | Not true | ToolBook 8.1 is a 32-bit program. |
 | WV-048 | Known | The public Knowledge Base at dennydedmore.com records post-EOL activation constraints, 11.5 Patch 4, and the Repair Kit. |
+| WV-049 | Known | Empty-key `ENCRYPTEX` uses the nine bytes `BMWBMWBMW` at `DS:0x28`, indexed by position modulo 9. |
+| WV-050 | Known | The five NIDA system books store `62 70 49 6a 7a`, which that cipher decrypts to `admin`. |
+| WV-051 | Known | A plain `To Handle` prefix finds 76 handlers in `9e954d01.tbk` and 100 in `nida81.tbk`, and almost all of them are `buttonClick`. |
 
 ## Known
 
@@ -81,6 +84,27 @@ The public ToolBook Knowledge Base hosted by Denny Dedmore at https://dennydedmo
 
 Evidence: the pages summarized in `SME/kb-notes.md` and `Worldview/2026-10-19-kb.md`.
 Falsify: an activation server that still issues new keys, or a Patch 4 that does not contain the listed fixes.
+
+### WV-049
+
+`ENCRYPTEX` with an empty key does not use the 10-byte keyed table. The nine bytes at `DS:0x28` are `BMWBMWBMW`. The index is the character position modulo 9. A letter becomes `((K + c - 0x82) mod 58) + 0x41`. `62 6d 77 62` decrypts to `aaaa`. One `a` encrypts to `62`.
+
+Evidence: `TBCBT` `ENCRYPTEX` / `DECRYPTEX`, and `cipher/empty_key.py` in TBdecompile `816dd12`.
+Falsify: a byte in that function's empty-key path that does not match this formula, or a round-trip of `aaaa` that is not `62 6d 77 62`.
+
+### WV-050
+
+`nc81base.sbk` stores `62 70 49 6a 7a` at file offset `0x1F6C`. WV-049 decrypts that to `admin`, and encrypting `admin` produces those bytes. `NC81BANK.SBK`, `nc81recs.sbk`, `nc81test.sbk`, and `nc81trnr.sbk` store the same five bytes. This is the author password. Opening the records does not require it.
+
+Evidence: those five files, and the round-trip in TBdecompile `816dd12`.
+Falsify: one of those books whose stored password bytes are not `62 70 49 6a 7a`, or a decrypt of those bytes that is not `admin`.
+
+### WV-051
+
+Scanning for a plain `To Handle` name and expanding the body finds 76 handlers in `9e954d01.tbk`: 75 are `buttonClick` and one is `EnterPage`. The same scan finds 100 handlers in `nida81.tbk`, all `buttonClick`. The 11.5 export of `nida81.tbk` has eleven handler names. Ten of them are not stored as that plain prefix, so this scan does not see them. `tb80r.sbk` and `nc81base.sbk` return none, because the name is compressed too.
+
+Evidence: the expander in openscript_analysis `v1.0.0r9`, run on those books.
+Falsify: a plain `To Handle` name in `nida81.tbk` that is not `buttonClick`, or an `EnterPage` body from `9e954d01.tbk` that does not call `getLogoBook()`.
 
 ## Thought
 
